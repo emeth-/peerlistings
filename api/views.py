@@ -40,6 +40,8 @@ def dtables_example(request):
         "users": []
     })
 
+def sell(request):
+    return TemplateResponse(request, 'sell.html', context={})
 
 def autocomplete(request, obj):
     data = []
