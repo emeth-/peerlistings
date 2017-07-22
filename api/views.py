@@ -35,10 +35,11 @@ def get_datatable_data(request):
     }, default=json_custom_parser), content_type='application/json', status=200)
 
 
-def dtables_example(request):
-    return TemplateResponse(request, 'datatables.html', context={
-        "users": []
-    })
+def buy(request):
+    return TemplateResponse(request, 'buy.html', context={})
+
+def howitworks(request):
+    return TemplateResponse(request, 'howitworks.html', context={})
 
 def sell(request):
     return TemplateResponse(request, 'sell.html', context={})
