@@ -1,34 +1,21 @@
 from django.db import models
 
-class Fish(models.Model):
-    name = models.CharField(max_length=255, default='')
-
-    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
-
-    def __unicode__(self):
-        return u'%s' % (self.name)
-
-    class Meta:
-        verbose_name = 'Fish'
-        verbose_name_plural = 'Fishes'
-        app_label = "api"
-
-class Person(models.Model):
-    name = models.CharField(max_length=255, default='')
-    position = models.CharField(max_length=255, default='')
-    salary = models.CharField(max_length=255, default='')
-    start_date = models.CharField(max_length=255, default='')
-    office = models.CharField(max_length=255, default='')
-    extn = models.CharField(max_length=255, default='')
-
-    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+class Listing(models.Model):
+    tx_id = models.CharField(max_length=255, primary_key=True)
+    game_name = models.CharField(max_length=255, default="", blank=True, null=True)
+    currency_name = models.CharField(max_length=255, default="", blank=True, null=True)
+    currency_amount = models.IntegerField(default=0, blank=True, null=True)
+    details = models.TextField(blank=True, null=True)
+    cost = models.CharField(max_length=255, default="", blank=True, null=True)
+    seller_address = models.CharField(max_length=255, default="", blank=True, null=True)
+    block_number = models.IntegerField(default=0, blank=True, null=True)
 
     def __unicode__(self):
-        return u'%s' % (self.name)
+        return u'%s' % (self.tx_id)
 
     class Meta:
-        verbose_name = 'Person'
-        verbose_name_plural = 'Persons'
+        verbose_name = 'Listing'
+        verbose_name_plural = 'Listings'
         app_label = "api"
+
+

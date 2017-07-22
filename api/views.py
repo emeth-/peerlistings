@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 import datetime
 import json
-from api.models import Fish, Person
+from api.models import Listing
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 
@@ -12,45 +12,6 @@ def json_custom_parser(obj):
     else:
         raise TypeError(obj)
 
-def delete_fish(request):
-    """
-        Expects as input:
-            - An id located in:
-                - request.body if Angular.js
-                - request.POST['id'] if backbone / jquery
-    """
-    fish_id = request.body #change this depending on how your frontend sends data, as POST or in the body
-
-    Fish.objects.filter(id=fish_id).delete()
-    return HttpResponse(json.dumps({
-        "status": "success"
-    }, default=json_custom_parser), content_type='application/json', status=200)
-
-def save_fish(request):
-    """
-        Expects as input:
-            - A json string location in:
-                - request.body if Angular.js
-                - request.POST['fish_info'] if backbone / jquery
-    """
-
-    fish_info = request.body #change this depending on how your frontend sends data, as POST or in the body
-
-    fsh = Fish(**json.loads(fish_info))
-    fsh.save()
-    return HttpResponse(json.dumps({
-        "status": "success",
-        "id": fsh.id,
-        "data": list(Fish.objects.filter(id=fsh.id).values())[0] #lololol
-    }, default=json_custom_parser), content_type='application/json', status=200)
-
-def get_fish(request):
-    fishies = Fish.objects.all()
-    return HttpResponse(json.dumps({
-        "status": "success",
-        "data": list(fishies.values())
-    }, default=json_custom_parser), content_type='application/json', status=200)
-
 def get_datatable_data(request):
 
     offset = int(request.GET['start'])
@@ -60,10 +21,10 @@ def get_datatable_data(request):
     if request.GET["order[0][dir]"] == "desc":
         sort_by = "-"+sort_by
 
-    c_data = Person.objects.all().order_by(sort_by, 'id')
+    c_data = Listing.objects.all().order_by(sort_by, 'block_number')
     recordsTotal = c_data.count()
-    if request.GET.get('person_filter'):
-        c_data = c_data.filter(name__icontains=request.GET['person_filter'])
+    if request.GET.get('gamename_filter'):
+        c_data = c_data.filter(game_name__icontains=request.GET['gamename_filter'])
     recordsFiltered = c_data.count()
 
     return HttpResponse(json.dumps({
@@ -82,11 +43,11 @@ def dtables_example(request):
 
 def autocomplete(request, obj):
     data = []
-    if obj == "person":
-        for l in Person.objects.filter(name__icontains=request.POST['query']).order_by('name'):
+    if obj == "game_name":
+        for l in Listing.objects.filter(game_name__icontains=request.POST['query']).order_by('name'):
             data.append({
-                "id": l.name,# l.id,
-                "name": l.name
+                "id": l.game_name,
+                "name": l.game_name
             })
 
     #elif...

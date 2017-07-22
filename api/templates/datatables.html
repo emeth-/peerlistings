@@ -77,36 +77,36 @@ $(document).ready(function() {
 				"defaultContent": ''
 			},
             {
-                data: 'name',
-                name: 'name',
+                data: 'game_name',
+                name: 'game_name',
                 render: function (a, b, obj, d) {
-                    return obj.name;
+                    return obj.game_name;
                 },
-                title: 'Name'
+                title: 'Game'
             },
             {
-                data: 'position',
-                name: 'position',
+                data: 'currency_name',
+                name: 'currency_name',
                 render: function (a, b, obj, d) {
-                    return obj.position;
+                    return obj.currency_name;
                 },
-                title: 'Position'
+                title: 'Currency'
             },
             {
-                data: 'office',
-                name: 'office',
+                data: 'currency_amount',
+                name: 'currency_amount',
                 render: function (a, b, obj, d) {
-                    return obj.office;
+                    return obj.currency_amount;
                 },
-                title: 'Office'
+                title: 'Amount'
             },
             {
-                data: 'salary',
-                name: 'salary',
+                data: 'cost',
+                name: 'cost',
                 render: function (a, b, obj, d) {
-                    return obj.salary;
+                    return obj.cost;
                 },
-                title: 'Salary'
+                title: 'Cost (PPC)'
             },
 		],
 		"order": [[1, 'asc']],
@@ -118,7 +118,7 @@ $(document).ready(function() {
             url: '/get_datatable_data',
             type: 'GET',
             "data": function(d) {
-              d.person_filter = person_filter;
+              d.gamename_filter = gamename_filter;
             }
         },
         pageLength: 10,
@@ -142,7 +142,7 @@ $(document).ready(function() {
 	} );
 
 
-  this.person_magic = $('#person_magic').magicSuggest({
+  this.gamename_magic = $('#gamename_magic').magicSuggest({
       allowFreeEntries: false,
       expandOnFocus: true,
       useTabKey: true,
@@ -150,20 +150,20 @@ $(document).ready(function() {
       displayField: 'name',
       maxSelection: 1,
       data: function (query) {
-          return '/autocomplete/person/?query=' + encodeURIComponent(query);
+          return '/autocomplete/gamename/?query=' + encodeURIComponent(query);
       },
   });
 
 
-  $(this.person_magic).on('selectionchange', function (event, ms) {
+  $(this.gamename_magic).on('selectionchange', function (event, ms) {
       var selected_value_list = this.getValue();
-      person_filter = selected_value_list[0];
+      gamename_filter = selected_value_list[0];
       dtable.draw();
   });
 
 } );
 
-var person_filter;
+var gamename_filter;
 var dtable;
 
     </script>
@@ -180,37 +180,19 @@ var dtable;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">Peerlistings</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
       </div>
     </nav>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron" style="padding-top: 10px !important; padding-bottom: 10px !important">
       <div class="container">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
-
-
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="form-group">
-                <label for="person_magic" class="col-sm-4">Person Filter</label>
-                <div class="col-sm-7">
-                    <div id="person_magic"></div>
-                    <input type="text" class="form-control input-sm input-sm" id="person_id" value="" style="display:none">
-                </div>
+                <label for="gamename_magic">Game Name Filter</label><br>
+                    <div id="gamename_magic"></div>
+                    <input type="text" class="form-control input-sm input-sm" id="gamename_id" value="" style="display:none">
             </div>
         </div>
       </div>
