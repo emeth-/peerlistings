@@ -6,6 +6,29 @@
 
 
 {% block additional_js %}
+$(document).ready(function() {
+
+  this.gamename_magic = $('#gamename_magic').magicSuggest({
+      allowFreeEntries: false,
+      expandOnFocus: true,
+      useTabKey: true,
+      valueField: 'id',
+      displayField: 'name',
+      maxSelection: 1,
+      data: function (query) {
+          return '/autocomplete/gamename/?query=' + encodeURIComponent(query);
+      },
+  });
+
+
+  $(this.gamename_magic).on('selectionchange', function (event, ms) {
+      var selected_value_list = this.getValue();
+      gamename_filter = selected_value_list[0];
+      dtable.draw();
+  });
+
+} );
+var gamename_filter;
 
 {% endblock %}
 
