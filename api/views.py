@@ -36,6 +36,29 @@ def get_datatable_data(request):
     }, default=json_custom_parser), content_type='application/json', status=200)
 
 
+def calc_fee(request):
+    """
+    "game_name": jQuery("#gamename_id").val(),
+    "currency_name": jQuery("#currency_name").val(),
+    "currency_amount": jQuery("#currency_amount").val(),
+    "cost": jQuery("#cost").val(),
+    "details": jQuery("#details").val(),
+    """
+
+    data = {
+        "a": "pl", #App = Peerlistings
+        "gn": request.POST['game_name'],
+        "cn": request.POST['currency_name'],
+        "ca": request.POST['currency_amount'],
+        "c": request.POST['cost'],
+        "d": request.POST['details'],
+    }
+
+    fee = OP_RETURN_calc_fee(json.dumps(data))
+
+    return HttpResponse(json.dumps({
+        "fee": fee,
+    }, default=json_custom_parser), content_type='application/json', status=200)
 
 def submit_sell(request):
     """

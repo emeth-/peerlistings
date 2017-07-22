@@ -27,10 +27,38 @@ $(document).ready(function() {
       gamename_filter = selected_value_list[0];
   });
 
+  $('.newlisting').find('input').on('keyup', function() {
+	calc_fee();
+  });
+  $('.newlisting').find('textarea').on('keyup', function() {
+	calc_fee();
+  });
+
 } );
 var gamename_filter;
 
-function submit_listing(){
+function calc_fee() {
+  $.ajax({
+	  type: 'POST',
+	  url: '/calc_fee',
+	  data: {
+		 "game_name": jQuery("#gamename_id").val(),
+		 "currency_name": jQuery("#currency_name").val(),
+		 "currency_amount": jQuery("#currency_amount").val(),
+		 "cost": jQuery("#cost").val(),
+		 "details": jQuery("#details").val(),
+	  },
+	  dataType: 'json',
+	  success: function (data) {
+		jQuery("#fee_to_post").val(data.fee);
+	  },
+	  error: function(e, type, message) {
+		  console.log("ERROR", e, type, message);
+	  }
+  });
+}
+
+function submit_listing() {
   $('#submit_listing_button').text('Sending listing to network...');
   $('#submit_listing_button').prop('disabled', true);
   $.ajax({
@@ -73,7 +101,7 @@ function submit_listing(){
       <div class="container">
         <div class="col-sm-5">
 		  <h2>New Listing</h2>
-            <div class="form-group">
+            <div class="form-group newlisting">
                 <label>Game Name</label><br>
 				<div id="gamename_magic"></div>
 				<input type="text" class="form-control input-sm input-sm" id="gamename_id" value="" style="display:none"><br>

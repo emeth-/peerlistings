@@ -62,6 +62,19 @@ OP_RETURN_NET_TIMEOUT=30 # how long to time out (in seconds) when communicating 
 
 # User-facing functions
 
+def OP_RETURN_calc_fee(data):
+
+  if isinstance(data, basestring):
+    data=data.encode('utf-8') # convert to binary string
+
+  data_len=len(data)
+  if data_len==0:
+    return {'error': 'Some data is required to be stored'}
+
+  output_amount=OP_RETURN_BTC_FEE*int((data_len+OP_RETURN_MAX_BYTES-1)/OP_RETURN_MAX_BYTES) 
+
+  return output_amount
+
 def OP_RETURN_store(data, testnet=False):
   # Data is stored in OP_RETURNs within a series of chained transactions.
   # If the OP_RETURN is followed by another output, the data continues in the transaction spending that output.
@@ -82,6 +95,9 @@ def OP_RETURN_store(data, testnet=False):
   # Calculate amounts and choose first inputs to use
 
   output_amount=OP_RETURN_BTC_FEE*int((data_len+OP_RETURN_MAX_BYTES-1)/OP_RETURN_MAX_BYTES) # number of transactions required
+
+  print "output_amount", output_amount
+  import sys; sys.exit()
 
   inputs_spend=OP_RETURN_select_inputs(output_amount, testnet)
   if 'error' in inputs_spend:
