@@ -9,8 +9,9 @@
 $(document).ready(function() {
 
   this.gamename_magic = $('#gamename_magic').magicSuggest({
-      allowFreeEntries: false,
+      allowFreeEntries: true,
       expandOnFocus: true,
+	  placeholder: '',
       useTabKey: true,
       valueField: 'id',
       displayField: 'name',
@@ -24,12 +25,45 @@ $(document).ready(function() {
   $(this.gamename_magic).on('selectionchange', function (event, ms) {
       var selected_value_list = this.getValue();
       gamename_filter = selected_value_list[0];
-      dtable.draw();
   });
 
 } );
 var gamename_filter;
 
+function submit_listing(){
+  $('#submit_listing_button').text('Sending listing to network...');
+  $('#submit_listing_button').prop('disabled', true);
+  $.ajax({
+	  type: 'POST',
+	  url: '/submit_sell',
+	  data: {
+		 "game_name": jQuery("#gamename_id").val(),
+		 "currency_name": jQuery("#currency_name").val(),
+		 "currency_amount": jQuery("#currency_amount").val(),
+		 "cost": jQuery("#cost").val(),
+		 "details": jQuery("#details").val(),
+	  },
+	  dataType: 'json',
+	  success: function (data) {
+		  $('#submit_listing_button').text('Submit Listing');
+		  $('#submit_listing_button').prop('disabled', false);
+		  alert("Success!");
+		  jQuery("#gamename_id").val('');
+		  jQuery("#currency_name").val('');
+		  jQuery("#currency_amount").val('');
+		  jQuery("#cost").val('');
+		  jQuery("#details").val('');
+		  jQuery("#details").val('');
+		  jQuery("#fee_to_post").val('0.01');
+	  },
+	  error: function(e, type, message) {
+		  $('#submit_listing_button').text('Submit Listing');
+		  $('#submit_listing_button').prop('disabled', false);
+		  alert("Error while attempting to submit listing! Check console for more details.");
+		  console.log("ERROR", e, type, message);
+	  }
+  });
+}
 {% endblock %}
 
 {% block content %}
@@ -45,32 +79,32 @@ var gamename_filter;
 				<input type="text" class="form-control input-sm input-sm" id="gamename_id" value="" style="display:none"><br>
 
                 <label>Currency Name</label><br>
-				<input type="text" class="form-control" placeholder="E.g. Stone of Jordan">
+				<input type="text" id='currency_name' class="form-control" placeholder="E.g. Stone of Jordan">
 				<br>
 
 				<label>Currency Amount</label><br>
-				<input type="text" class="form-control" placeholder="E.g. 10">
+				<input type="text" id='currency_amount' class="form-control" placeholder="E.g. 10">
 				<br>
 
 				<label>Cost</label><br>
 				<div class="input-group">
-				  <input type="text" style="text-align: right !important" class="form-control" placeholder="Amount in peercoin">
+				  <input type="text" id='cost' style="text-align: right !important" class="form-control" placeholder="Amount in peercoin">
 				  <span class="input-group-addon" id="basic-addon2">PPC</span>
 				</div><br>
 
                 <label>Details</label><br>
-				<textarea class="form-control" placeholder="Include contact information, method of trade, and whether you will be proving ownership of trade items"></textarea>
+				<textarea class="form-control" placeholder="Include contact information, method of trade, and whether you will be proving ownership of trade items" id='details'></textarea>
 				<br>
 
 
                 <label>Fee To Post Listing</label><br>
 				<div class="input-group">
-				  <input type="text" class="form-control" style="text-align:right !important" placeholder="0.01" disabled="disabled">
+				  <input type="text" class="form-control" style="text-align:right !important" placeholder="0.01" id='fee_to_post' disabled="disabled">
 				  <span class="input-group-addon" id="basic-addon2">PPC</span>
 				</div>
 				<br>
 
-				<button class="form-control btn btn-primary">Submit Listing</button>
+				<button class="form-control btn btn-primary" id='submit_listing_button' onclick="submit_listing()">Submit Listing</button>
             </div>
         </div>
 
