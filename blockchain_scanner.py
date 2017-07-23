@@ -23,19 +23,29 @@ while True:
             data = {'error': 'Invalid JSON'}
 
         if data.get('a') == "pl":
-            listing_data = {
-                "tx_id": t['txids'][0],
-                "game_name": data['gn'],
-                "currency_name": data['cn'],
-                "currency_amount": data['ca'],
-                "cost": data['c'],
-                "details": data['d'],
-                "seller_address": t['from_address'],
-                "block_number": t['heights'][0]
-            }
-            if listing_data['game_name']:
-                print "listing_data", listing_data
-                new_l = Listing(**listing_data)
-                new_l.save()
+            try:
+                listing_data = {
+                    "tx_id": t['txids'][0],
+                    "game_name": data['gn'],
+                    "currency_name": data['cn'],
+                    "currency_amount": data['ca'],
+                    "cost": data['c'],
+                    "details": data['d'],
+                    "seller_address": t['from_address'],
+                    "block_number": t['heights'][0]
+                }
+            except KeyError:
+
+                if (listing_data['game_name'] and
+                    listing_data['currency_name'] and
+                    listing_data['currency_amount'] and
+                    listing_data['cost'] and
+                    listing_data['details']):
+                    print "listing_data", listing_data
+                    try:
+                        new_l = Listing(**listing_data)
+                        new_l.save()
+                    except:
+                        print "Error (type error?) while trying to save: ", listing_data
 
     time.sleep(10)
