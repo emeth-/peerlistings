@@ -11,69 +11,57 @@
 
 {% block content %}
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron" style="padding-top: 10px !important; padding-bottom: 10px !important">
-      <div class="container">
-        <div class="col-sm-5">
-		  <h2>New Listing</h2>
-            <div class="form-group">
-                <label>Game Name</label><br>
-				<div id="gamename_magic"></div>
-				<input type="text" class="form-control input-sm input-sm" id="gamename_id" value="" style="display:none"><br>
-
-                <label>Currency Name</label><br>
-				<input type="text" class="form-control" placeholder="E.g. Stone of Jordan">
-				<br>
-
-				<label>Currency Amount</label><br>
-				<input type="text" class="form-control" placeholder="E.g. 10">
-				<br>
-
-				<label>Cost</label><br>
-				<div class="input-group">
-				  <input type="text" style="text-align: right !important" class="form-control" placeholder="Amount in peercoin">
-				  <span class="input-group-addon" id="basic-addon2">PPC</span>
-				</div><br>
-
-                <label>Details</label><br>
-				<textarea class="form-control" placeholder="Include contact information, method of trade, and whether you will be proving ownership of trade items"></textarea>
-				<br>
 
 
-                <label>Fee To Post Listing</label><br>
-				<div class="input-group">
-				  <input type="text" class="form-control" style="text-align:right !important" placeholder="0.01" disabled="disabled">
-				  <span class="input-group-addon" id="basic-addon2">PPC</span>
-				</div>
-				<br>
 
-				<button class="form-control btn btn-primary">Submit Listing</button>
-            </div>
+
+
+
+      <div class="row featurette">
+
+        <div class="col-md-3" style="padding-right: 10px !important;">
+
+		<img src='/static/images/character1.jpg' width=278 height=482>
+
+        </div>
+        <div class="col-md-6" style="text-align:center;">
+
+          <h1 class="featurette-heading">How does it work?</h1>
+
+		  <div class="list-group">
+			<button type="button" class="list-group-item">Seller posts a listing selling a virtual in-game currency, with contact information</button>
+			<button type="button" class="list-group-item">Buyer finds seller's listing in the blockchain</button>
+			<button type="button" class="list-group-item">Buyer contacts seller, and verifies seller's identity</button>
+			<button type="button" class="list-group-item">Buyer satisfies himself of seller's reputation/ownership, or sets up escrow service</button>
+			<button type="button" class="list-group-item">Buyer sends peercoin to seller</button>
+			<button type="button" class="list-group-item">Seller delivers in-game currency to buyer</button>
+		  </div>
+
+
+      <hr class="featurette-divider">
+	  
+          <h1 class="featurette-heading">Why is the blockchain the solution?</h1>
+
+		  <div class="list-group">
+			<button type="button" class="list-group-item">Sellers avoid chargeback scammers (Craigslist)</button>
+			<button type="button" class="list-group-item">Buyers can verify seller's ownership with signature verification (Ebay)</button>
+			<button type="button" class="list-group-item">Big companies can't force your listing to be removed with a DMCA notice (Ebay, Craigslist)</button>
+			<button type="button" class="list-group-item">The trade currency has value (d2jsp)</button>
+		  </div>
+
+
+
+        </div>
+        <div class="col-md-3" style="padding-left: 10px !important;text-align:right;">
+
+		<img src='/static/images/character2.jpg' width=278 height=482>
         </div>
 
-        <div class="col-sm-2">
-		  &nbsp;
-        </div>
-
-        <div class="col-sm-5">
-		  <h2>Prove Signature</h2>
-            <div class="form-group">
-
-                <label>Buyer Provided Listing ID</label><br>
-				<input type="text" class="form-control" placeholder="">
-				<br>
-
-				<button class="form-control btn btn-primary">Sign Listing ID</button>
-				<br>
-				<hr style="height:1px !important; color: #f00; background-color: #f00; border: 0px solid #000000 !important">
-
-                <label>Signature (Provide to Buyer to verify identity)</label><br>
-				<textarea class="form-control" placeholder="Click Sign Listing ID above to generate a signature"></textarea>
-				<br>
-            </div>
-		</div>
       </div>
 
-    </div>
+      <hr class="featurette-divider">
+
+
+
 
 {% endblock %}
