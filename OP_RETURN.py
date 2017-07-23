@@ -60,7 +60,8 @@ OP_RETURN_MAX_BLOCKS=10 # maximum number of blocks to try when retrieving data
 OP_RETURN_NET_TIMEOUT=30 # how long to time out (in seconds) when communicating with peercoin node
 
 
-# User-facing functions
+def get_block_height(testnet=False):
+  return int(OP_RETURN_bitcoin_cmd('getblockcount', testnet))
 
 def OP_RETURN_calc_fee(data):
 
@@ -71,7 +72,7 @@ def OP_RETURN_calc_fee(data):
   if data_len==0:
     return {'error': 'Some data is required to be stored'}
 
-  output_amount=OP_RETURN_BTC_FEE*int((data_len+OP_RETURN_MAX_BYTES-1)/OP_RETURN_MAX_BYTES) 
+  output_amount=OP_RETURN_BTC_FEE*int((data_len+OP_RETURN_MAX_BYTES-1)/OP_RETURN_MAX_BYTES)
 
   return output_amount
 
@@ -95,9 +96,6 @@ def OP_RETURN_store(data, testnet=False):
   # Calculate amounts and choose first inputs to use
 
   output_amount=OP_RETURN_BTC_FEE*int((data_len+OP_RETURN_MAX_BYTES-1)/OP_RETURN_MAX_BYTES) # number of transactions required
-
-  print "output_amount", output_amount
-  import sys; sys.exit()
 
   inputs_spend=OP_RETURN_select_inputs(output_amount, testnet)
   if 'error' in inputs_spend:
@@ -166,7 +164,7 @@ def OP_RETURN_store(data, testnet=False):
 
   return result
 
-def OP_RETURN_retrieve_fromblock(block_number=None, testnet=False):
+def OP_RETURN_retrieve_fromblock(block_number=None, testnet=False, scan_mempool=False):
   # Validate parameters and get status of Bitcoin Core
 
   if not OP_RETURN_bitcoin_check(testnet):
@@ -181,7 +179,11 @@ def OP_RETURN_retrieve_fromblock(block_number=None, testnet=False):
 
   results=[]
 
-  for height in [block_number, 0]:
+  blocks_to_scan = [block_number]
+  if scan_mempool:
+    blocks_to_scan.append(0)
+
+  for height in blocks_to_scan:
     if height==0:
       txids=OP_RETURN_list_mempool_txns(testnet) # if mempool, only get list for now (to save RPC calls)
       txns=None
@@ -203,6 +205,7 @@ def OP_RETURN_retrieve_fromblock(block_number=None, testnet=False):
         result={
           'txids': [str(txid)],
           'data': found['op_return'],
+          'vin_txid': txn_unpacked['vin'][0]['txid']
         }
 
         key_heights={height: True}
@@ -265,7 +268,27 @@ def OP_RETURN_retrieve_fromblock(block_number=None, testnet=False):
         result['heights']=list(key_heights.keys())
         results.append(result)
 
-  return results
+  results = sorted(results, key=lambda entry: -1*len(entry['txids']))
+
+  final_results = []
+  used_transactions = {}
+  for r in results:
+    already_found = False
+    for tx in r['txids']:
+      if tx in used_transactions:
+        already_found = True
+      used_transactions[tx] = 1
+    if not already_found:
+      raw_trans = OP_RETURN_bitcoin_cmd('getrawtransaction', testnet, r['vin_txid'])
+      decoded_raw_trans = OP_RETURN_bitcoin_cmd('decoderawtransaction', testnet, raw_trans)
+      r['from_address'] = None
+      for vout in decoded_raw_trans['vout']:
+        if 'addresses' in vout['scriptPubKey']:
+          r['from_address'] = vout['scriptPubKey']['addresses'][0]
+      del r['vin_txid']
+      final_results.append(r)
+
+  return final_results
 
 def OP_RETURN_retrieve(ref, max_results=1, testnet=False):
   # Validate parameters and get status of Bitcoin Core
