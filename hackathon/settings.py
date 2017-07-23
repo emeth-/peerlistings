@@ -71,15 +71,23 @@ DATABASES = {
 
 
 #TEMP - local development only, revert to SQLite for production
-DATABASES = {
-    'default': {
-        'HOST':'localhost',
-        'PORT': '5432',
-        'NAME': 'peerlistings',
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
+import os
+import pwd
+
+def get_username():
+    return pwd.getpwuid( os.getuid() )[ 0 ]
+
+if get_username() == "emeth":
+    #local dev, use postgres
+    DATABASES = {
+        'default': {
+            'HOST':'localhost',
+            'PORT': '5432',
+            'NAME': 'peerlistings',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'USER': 'postgres',
+        }
     }
-}
 
 
 # Internationalization

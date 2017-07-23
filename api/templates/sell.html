@@ -127,7 +127,14 @@ function create_signature() {
     <div class="jumbotron" style="padding-top: 10px !important; padding-bottom: 10px !important">
       <div class="container">
         <div class="col-sm-5">
-		  <h2>New Listing</h2>
+
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">New Listing</h3>
+  </div>
+  <div class="panel-body">
+
             <div class="form-group newlisting">
                 <label>Game Name</label><br>
 				<div id="gamename_magic"></div>
@@ -161,6 +168,11 @@ function create_signature() {
 
 				<button class="form-control btn btn-primary" id='submit_listing_button' onclick="submit_listing()">Submit Listing</button>
             </div>
+  </div>
+</div>
+
+
+
         </div>
 
         <div class="col-sm-2">
@@ -168,7 +180,12 @@ function create_signature() {
         </div>
 
         <div class="col-sm-5">
-		  <h2>Prove Identity</h2>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Prove Identity</h3>
+              </div>
+              <div class="panel-body">
             <div class="form-group">
 
                 <label>Buyer Provided String</label><br>
@@ -183,6 +200,10 @@ function create_signature() {
 				<textarea id='signature_string' class="form-control" placeholder="Click 'Create Signature' above to generate a signature"></textarea>
 				<br>
             </div>
+              </div>
+            </div>
+
+
 		</div>
       </div>
 
