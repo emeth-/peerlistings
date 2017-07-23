@@ -12,9 +12,6 @@ from OP_RETURN import *
 current_block_number = get_block_height(testnet=True)
 
 while True:
-    #latest_block_number = get_block_height(testnet=True)
-    #if latest_block_number != current_block_number:
-    #    print OP_RETURN_retrieve_fromblock(block_number=latest_block_number, testnet=True)
     found_db_transactions = OP_RETURN_retrieve_fromblock(testnet=True, scan_mempool=True)
     for t in found_db_transactions:
         try:
@@ -34,8 +31,6 @@ while True:
                     "seller_address": t['from_address'],
                     "block_number": t['heights'][0]
                 }
-            except KeyError:
-
                 if (listing_data['game_name'] and
                     listing_data['currency_name'] and
                     listing_data['currency_amount'] and
@@ -47,5 +42,7 @@ while True:
                         new_l.save()
                     except:
                         print "Error (type error?) while trying to save: ", listing_data
+            except KeyError:
+                pass
 
     time.sleep(10)
