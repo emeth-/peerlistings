@@ -88,8 +88,8 @@ def sell(request):
 
 def autocomplete(request, obj):
     data = []
-    if obj == "game_name":
-        for l in Listing.objects.filter(game_name__icontains=request.POST['query']).order_by('name'):
+    if obj == "gamename":
+        for l in Listing.objects.filter(game_name__icontains=request.POST['query']).order_by('game_name'):
             data.append({
                 "id": l.game_name,
                 "name": l.game_name

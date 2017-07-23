@@ -23,21 +23,36 @@ function format ( rowData ) {
 	var div = $('<div/>')
 		.addClass( 'loading' )
 		.text( 'Loading...' );
-
-	//$.ajax( {
-	//	url: '/media/blog/2017-03-31/details.php',
-	//	data: {
-	//		name: rowData.name
-	//	},
-	//	dataType: 'json',
-	//	type: 'post',
-	//	success: function ( json ) {
-	//		div
-	//			.html( json.html )
-	//			.removeClass( 'loading' );
-	//	}
-	//} );
-    div.html("Profile details here").removeClass( 'loading' );
+    var htmlz = "<div class='col-md-12'>";
+    htmlz += '<div class="col-md-6"><div class="panel panel-default"> \
+  <div class="panel-heading"> \
+    <h3 class="panel-title">Listing Details</h3> \
+  </div> \
+  <div class="panel-body"> \
+    '+rowData.details+' \
+  </div> \
+</div></div>';
+    htmlz += '<div class="col-md-6"><div class="panel panel-default"> \
+  <div class="panel-heading"> \
+    <h3 class="panel-title">Seller: '+rowData.seller_address+'</h3> \
+  </div> \
+  <div class="panel-body"> \
+        <h2>Verify Seller Identity</h2> \
+        <div class="form-group"> \
+            <label>Ask Seller to sign the following text:</label><br> \
+            <input onClick="this.select();" type="text" class="form-control" value="'+rowData.seller_address+'|'+rowData.seller_address+'"> \
+            <hr style="height:1px !important; color: #f00; background-color: #f00; border: 0px solid #000000 !important"> \
+            <br> \
+            <label>When seller sends you the verification text, paste it below to verify:</label><br> \
+            <textarea class="form-control" placeholder="Seller provided verification string"></textarea> \
+            <br> \
+            <button class="form-control btn btn-primary">Verify Seller Identity</button> \
+            <br> \
+        </div> \
+  </div> \
+</div></div>';
+    htmlz += "</div>";
+    div.html(htmlz).removeClass( 'loading' );
 
 	return div;
 }
