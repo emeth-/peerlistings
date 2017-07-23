@@ -19,6 +19,29 @@
 
 {% block additional_js %}
 
+function verify_seller (t) {
+    $.ajax({
+        type: 'POST',
+        url: '/verify_signature',
+        data: {
+           "verification_string": jQuery(t).parent().find(".buyer_string").val(),
+           "signature": jQuery(t).parent().find(".seller_signature").val()
+        },
+        dataType: 'json',
+        success: function (data) {
+            if(data.verified_signature) {
+                alert("VALID! Identity verified!");
+            }
+            else {
+                alert("ERROR - INVALID! Signature did not match, identity NOT verified!");
+            }
+        },
+        error: function(e, type, message) {
+            alert("ERROR - INVALID! Signature did not match, identity NOT verified!");
+        }
+    });
+}
+
 function format ( rowData ) {
 	var div = $('<div/>')
 		.addClass( 'loading' )
@@ -40,13 +63,13 @@ function format ( rowData ) {
         <h2>Verify Seller Identity</h2> \
         <div class="form-group"> \
             <label>Ask Seller to sign the following text:</label><br> \
-            <input onClick="this.select();" type="text" class="form-control" value="'+rowData.tx_id+'|'+rowData.seller_address+'"> \
+            <input onClick="this.select();" type="text" class="form-control buyer_string" value="'+rowData.tx_id+'|'+rowData.seller_address+'"> \
             <hr style="height:1px !important; color: #f00; background-color: #f00; border: 0px solid #000000 !important"> \
             <br> \
             <label>When seller sends you the verification text, paste it below to verify:</label><br> \
-            <textarea class="form-control" placeholder="Seller provided verification string"></textarea> \
+            <textarea class="form-control seller_signature" placeholder="Seller provided verification string"></textarea> \
             <br> \
-            <button class="form-control btn btn-primary">Verify Seller Identity</button> \
+            <button class="form-control btn btn-primary" onclick="verify_seller(this)">Verify Seller Identity</button> \
             <br> \
         </div> \
   </div> \

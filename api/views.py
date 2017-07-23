@@ -68,6 +68,27 @@ def create_signature(request):
     }, default=json_custom_parser), content_type='application/json', status=200)
 
 
+def verify_signature(request):
+    """
+    "verification_string": jQuery(t).parent().find(".buyer_string").val(),
+    "signature": jQuery(t).parent().find(".seller_signature").val()
+    """
+    pieces = request.POST['verification_string'].split('|')
+    tx_id = pieces[0]
+    seller_address = pieces[1]
+
+    # Verify listing exists, this throws error if not found
+    found_listing = Listing.objects.get(tx_id=tx_id, seller_address=seller_address)
+
+    sign_this = tx_id + "|" + seller_address
+    verified_signature = OP_RETURN_verify_signature(seller_address, request.POST['signature'], sign_this, testnet=True)
+    print "*~~***", verified_signature
+
+    return HttpResponse(json.dumps({
+        "verified_signature": verified_signature,
+    }, default=json_custom_parser), content_type='application/json', status=200)
+
+
 def submit_sell(request):
     data = {
         "a": "pl", #App = Peerlistings
