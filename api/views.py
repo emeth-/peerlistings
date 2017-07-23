@@ -52,15 +52,23 @@ def calc_fee(request):
         "fee": fee,
     }, default=json_custom_parser), content_type='application/json', status=200)
 
-def submit_sell(request):
-    """
-    "game_name": jQuery("#gamename_id").val(),
-    "currency_name": jQuery("#currency_name").val(),
-    "currency_amount": jQuery("#currency_amount").val(),
-    "cost": jQuery("#cost").val(),
-    "details": jQuery("#details").val(),
-    """
+def create_signature(request):
+    pieces = request.POST['verification_string'].split('|')
+    tx_id = pieces[0]
+    seller_address = pieces[1]
 
+    # Verify listing exists, this throws error if not found
+    found_listing = Listing.objects.get(tx_id=tx_id, seller_address=seller_address)
+
+    sign_this = tx_id + "|" + seller_address
+    signature = OP_RETURN_sign(seller_address, sign_this, testnet=True)
+
+    return HttpResponse(json.dumps({
+        "signature": signature,
+    }, default=json_custom_parser), content_type='application/json', status=200)
+
+
+def submit_sell(request):
     data = {
         "a": "pl", #App = Peerlistings
         "gn": request.POST['game_name'],

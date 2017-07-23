@@ -164,6 +164,11 @@ def OP_RETURN_store(data, testnet=False):
 
   return result
 
+
+def OP_RETURN_sign(address, message, testnet=False):
+  signature = OP_RETURN_bitcoin_cmd('signmessage', testnet, address, message)
+  return signature
+
 def OP_RETURN_retrieve_fromblock(block_number=None, testnet=False, scan_mempool=False):
   # Validate parameters and get status of Bitcoin Core
 

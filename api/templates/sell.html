@@ -91,6 +91,33 @@ function submit_listing() {
 		  console.log("ERROR", e, type, message);
 	  }
   });
+
+}
+
+
+function create_signature() {
+  $('#create_signature_button').text('Signing...');
+  $('#create_signature_button').prop('disabled', true);
+  $.ajax({
+	  type: 'POST',
+	  url: '/create_signature',
+	  data: {
+		 "verification_string": jQuery("#text_to_sign").val()
+	  },
+	  dataType: 'json',
+	  success: function (data) {
+		  $('#create_signature_button').text('Create Signature');
+		  $('#create_signature_button').prop('disabled', false);
+		  jQuery("#signature_string").val(data.signature);
+	  },
+	  error: function(e, type, message) {
+		  $('#create_signature_button').text('Create Signature');
+		  $('#create_signature_button').prop('disabled', false);
+		  alert("Error while attempting to sign! Check console for more details.");
+		  console.log("ERROR", e, type, message);
+	  }
+  });
+
 }
 {% endblock %}
 
@@ -141,19 +168,19 @@ function submit_listing() {
         </div>
 
         <div class="col-sm-5">
-		  <h2>Prove Signature</h2>
+		  <h2>Prove Identity</h2>
             <div class="form-group">
 
-                <label>Buyer Provided Listing ID</label><br>
-				<input type="text" class="form-control" placeholder="">
+                <label>Buyer Provided String</label><br>
+				<input type="text" class="form-control" id='text_to_sign' placeholder="Verification string buyer provided goes here">
 				<br>
 
-				<button class="form-control btn btn-primary">Sign Listing ID</button>
+				<button class="form-control btn btn-primary" id='create_signature_button' onclick="create_signature()">Create Signature</button>
 				<br>
 				<hr style="height:1px !important; color: #f00; background-color: #f00; border: 0px solid #000000 !important">
 
                 <label>Signature (Provide to Buyer to verify identity)</label><br>
-				<textarea class="form-control" placeholder="Click Sign Listing ID above to generate a signature"></textarea>
+				<textarea id='signature_string' class="form-control" placeholder="Click 'Create Signature' above to generate a signature"></textarea>
 				<br>
             </div>
 		</div>
