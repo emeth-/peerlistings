@@ -163,6 +163,7 @@ $(document).ready(function() {
       allowFreeEntries: false,
       expandOnFocus: true,
       useTabKey: true,
+	  placeholder: '',
       valueField: 'id',
       displayField: 'name',
       maxSelection: 1,
@@ -192,7 +193,7 @@ var dtable;
       <div class="container">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="gamename_magic">Game Name Filter</label><br>
+                <label for="gamename_magic">Filter by Game</label><br>
                     <div id="gamename_magic"></div>
                     <input type="text" class="form-control input-sm input-sm" id="gamename_id" value="" style="display:none">
             </div>
