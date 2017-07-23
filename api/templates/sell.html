@@ -24,7 +24,7 @@ $(document).ready(function() {
 
   $(this.gamename_magic).on('selectionchange', function (event, ms) {
       var selected_value_list = this.getValue();
-      gamename_filter = selected_value_list[0];
+      gamename_value = selected_value_list[0];
   });
 
   $('.newlisting').find('input').on('keyup', function() {
@@ -35,7 +35,7 @@ $(document).ready(function() {
   });
 
 } );
-var gamename_filter;
+var gamename_value;
 
 function calc_fee() {
   $.ajax({
@@ -65,7 +65,7 @@ function submit_listing() {
 	  type: 'POST',
 	  url: '/submit_sell',
 	  data: {
-		 "game_name": jQuery("#gamename_id").val(),
+		 "game_name": gamename_value,
 		 "currency_name": jQuery("#currency_name").val(),
 		 "currency_amount": jQuery("#currency_amount").val(),
 		 "cost": jQuery("#cost").val(),

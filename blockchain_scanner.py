@@ -15,19 +15,27 @@ while True:
     #latest_block_number = get_block_height(testnet=True)
     #if latest_block_number != current_block_number:
     #    print OP_RETURN_retrieve_fromblock(block_number=latest_block_number, testnet=True)
-    print OP_RETURN_retrieve_fromblock(testnet=True, scan_mempool=True)
-    """
-    [
-        {
-            "txids": [
-                "2e2354862d08be67c7c3fd723b1a8e96357703cda4d17240ca0fef7605a7b46b",
-                "33a3dd0953afbadf5d75a9735fc506d1092b158d6753dc8ec5818e68baaaf51b"
-            ],
-            "data": "{\"a\": \"pl\", \"c\": \"10\", \"cn\": \"Gold - Tichondrius Server\", \"ca\": \"100000\", \"gn\": \"\", \"d\": \"Contact me on keybase, username is emeth\"}",
-            "heights": [
-                0
-            ]
-        }
-    ]
-    """
+    found_db_transactions = OP_RETURN_retrieve_fromblock(testnet=True, scan_mempool=True)
+    for t in found_db_transactions:
+        try:
+            data = json.loads(t['data'])
+        except ValueError:
+            data = {'error': 'Invalid JSON'}
+
+        if data.get('a') == "pl":
+            listing_data = {
+                "tx_id": t['txids'][0],
+                "game_name": data['gn'],
+                "currency_name": data['cn'],
+                "currency_amount": data['ca'],
+                "cost": data['c'],
+                "details": data['d'],
+                "seller_address": t['from_address'],
+                "block_number": t['heights'][0]
+            }
+            if listing_data['game_name']:
+                print "listing_data", listing_data
+                new_l = Listing(**listing_data)
+                new_l.save()
+
     time.sleep(10)

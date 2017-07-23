@@ -37,14 +37,6 @@ def get_datatable_data(request):
 
 
 def calc_fee(request):
-    """
-    "game_name": jQuery("#gamename_id").val(),
-    "currency_name": jQuery("#currency_name").val(),
-    "currency_amount": jQuery("#currency_amount").val(),
-    "cost": jQuery("#cost").val(),
-    "details": jQuery("#details").val(),
-    """
-
     data = {
         "a": "pl", #App = Peerlistings
         "gn": request.POST['game_name'],
