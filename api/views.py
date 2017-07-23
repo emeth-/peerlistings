@@ -117,12 +117,15 @@ def sell(request):
 
 def autocomplete(request, obj):
     data = []
+    found_names = {}
     if obj == "gamename":
         for l in Listing.objects.filter(game_name__icontains=request.POST['query']).order_by('game_name'):
-            data.append({
-                "id": l.game_name,
-                "name": l.game_name
-            })
+            if l.game_name not in found_names:
+                data.append({
+                    "id": l.game_name,
+                    "name": l.game_name
+                })
+                found_names[l.game_name] = 1
 
     #elif...
 
